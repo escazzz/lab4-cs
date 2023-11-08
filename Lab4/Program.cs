@@ -170,7 +170,7 @@ public class Car
     }
 }
 
-// Определение класса CarComparer
+
 public class CarComparer : IComparer<Car>
 {
     public enum SortBy
@@ -270,7 +270,7 @@ class Lab4_2
 using System;
 using System.Collections.Generic;
 
-// Класс Car, предоставленный в задании №2
+
 public class Car
 {
     public string Name { get; set; }
@@ -286,11 +286,11 @@ public class Car
 
     public override string ToString()
     {
-        return $"{Name}, {ProductionYear}, {MaxSpeed} km/h";
+        return $"{Name}, {ProductionYear}, {MaxSpeed}";
     }
 }
 
-// Класс CarCatalog, содержащий массив Car и методы итерации
+
 public class CarCatalog
 {
     private Car[] cars;
@@ -300,25 +300,25 @@ public class CarCatalog
         this.cars = cars;
     }
 
-    // Прямой проход с первого элемента до последнего
+    
     public IEnumerable<Car> Forward()
     {
-        for (int i = 0; i < cars.Length; i++)
+        for (int i = 0; i < cars.Length; ++i)
         {
             yield return cars[i];
         }
     }
 
-    // Обратный проход от последнего к первому
+  
     public IEnumerable<Car> Reverse()
     {
-        for (int i = cars.Length - 1; i >= 0; i--)
+        for (int i = cars.Length - 1; i >= 0; --i)
         {
             yield return cars[i];
         }
     }
 
-    // Проход по элементам массива с фильтром по году выпуска
+  
     public IEnumerable<Car> FilterByYear(int year)
     {
         foreach (var car in cars)
@@ -330,7 +330,7 @@ public class CarCatalog
         }
     }
 
-    // Проход по элементам массива с фильтром по максимальной скорости
+    
     public IEnumerable<Car> FilterByMaxSpeed(int speed)
     {
         foreach (var car in cars)
@@ -343,11 +343,11 @@ public class CarCatalog
     }
 }
 
-class Program
+class Lab4_3
 {
     static void Main()
     {
-        // Пример использования
+        
         Car[] cars = new Car[]
         {
             new Car("Toyota", 2020, 180),
