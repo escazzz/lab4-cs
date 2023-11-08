@@ -1,4 +1,4 @@
-﻿/*using System.Text;
+/*using System.Text;
 
 public class MyMatrix
 {
@@ -120,7 +120,7 @@ public class MyMatrix
         return sb.ToString();
     }
 }
-class Program
+class Lab4_1
 {
     static void Main(string[] args)
     {
@@ -148,3 +148,238 @@ class Program
     }
 }
 */
+/*using System;
+using System.Collections.Generic;
+
+public class Car
+{
+    public string Name { get; set; }
+    public int ProductionYear { get; set; }
+    public int MaxSpeed { get; set; }
+
+    public Car(string name, int productionYear, int maxSpeed)
+    {
+        Name = name;
+        ProductionYear = productionYear;
+        MaxSpeed = maxSpeed;
+    }
+
+    public override string ToString()
+    {
+        return $"{Name}, {ProductionYear}, {MaxSpeed} ";
+    }
+}
+
+// Определение класса CarComparer
+public class CarComparer : IComparer<Car>
+{
+    public enum SortBy
+    {
+        Name,
+        ProductionYear,
+        MaxSpeed
+    }
+
+    public SortBy SortingBy { get; set; }
+
+    public CarComparer(SortBy sortBy)
+    {
+        SortingBy = sortBy;
+    }
+
+    public int Compare(Car x, Car y)
+    {
+        if (x == null || y == null)
+        {
+            return 0;
+        }
+
+        int result;
+        switch (SortingBy)
+        {
+            case SortBy.Name:
+                result = string.Compare(x.Name, y.Name);
+                break;
+            case SortBy.ProductionYear:
+                result = x.ProductionYear.CompareTo(y.ProductionYear);
+                break;
+            case SortBy.MaxSpeed:
+                result = x.MaxSpeed.CompareTo(y.MaxSpeed);
+                break;
+            default:
+                throw new ArgumentException("Invalid sorting option");
+        }
+
+        return result;
+    }
+}
+
+class Lab4_2
+{
+    static Car[] GetCarsFromUser()
+    {
+        Console.Write("Enter the number of cars: ");
+        int carCount = int.Parse(Console.ReadLine());
+        Car[] cars = new Car[carCount];
+
+        for (int i = 0; i < carCount; i++)
+        {
+            Console.WriteLine($"Enter details for car #{i + 1}:");
+            Console.Write("Name: ");
+            string name = Console.ReadLine();
+
+            Console.Write("Production Year: ");
+            int year = int.Parse(Console.ReadLine());
+
+            Console.Write("Max Speed: ");
+            int speed = int.Parse(Console.ReadLine());
+
+            cars[i] = new Car(name, year, speed);
+        }
+
+        return cars;
+    }
+
+    static void Main()
+    {
+        Car[] cars = GetCarsFromUser();
+
+        Array.Sort(cars, new CarComparer(CarComparer.SortBy.Name));
+        Console.WriteLine("Sorted by Name:");
+        foreach (Car car in cars)
+        {
+            Console.WriteLine(car);
+        }
+
+        Array.Sort(cars, new CarComparer(CarComparer.SortBy.ProductionYear));
+        Console.WriteLine("\nSorted by Production Year:");
+        foreach (Car car in cars)
+        {
+            Console.WriteLine(car);
+        }
+
+        Array.Sort(cars, new CarComparer(CarComparer.SortBy.MaxSpeed));
+        Console.WriteLine("\nSorted by Max Speed:");
+        foreach (Car car in cars)
+        {
+            Console.WriteLine(car);
+        }
+    }
+}
+*/
+using System;
+using System.Collections.Generic;
+
+// Класс Car, предоставленный в задании №2
+public class Car
+{
+    public string Name { get; set; }
+    public int ProductionYear { get; set; }
+    public int MaxSpeed { get; set; }
+
+    public Car(string name, int productionYear, int maxSpeed)
+    {
+        Name = name;
+        ProductionYear = productionYear;
+        MaxSpeed = maxSpeed;
+    }
+
+    public override string ToString()
+    {
+        return $"{Name}, {ProductionYear}, {MaxSpeed} km/h";
+    }
+}
+
+// Класс CarCatalog, содержащий массив Car и методы итерации
+public class CarCatalog
+{
+    private Car[] cars;
+
+    public CarCatalog(Car[] cars)
+    {
+        this.cars = cars;
+    }
+
+    // Прямой проход с первого элемента до последнего
+    public IEnumerable<Car> Forward()
+    {
+        for (int i = 0; i < cars.Length; i++)
+        {
+            yield return cars[i];
+        }
+    }
+
+    // Обратный проход от последнего к первому
+    public IEnumerable<Car> Reverse()
+    {
+        for (int i = cars.Length - 1; i >= 0; i--)
+        {
+            yield return cars[i];
+        }
+    }
+
+    // Проход по элементам массива с фильтром по году выпуска
+    public IEnumerable<Car> FilterByYear(int year)
+    {
+        foreach (var car in cars)
+        {
+            if (car.ProductionYear == year)
+            {
+                yield return car;
+            }
+        }
+    }
+
+    // Проход по элементам массива с фильтром по максимальной скорости
+    public IEnumerable<Car> FilterByMaxSpeed(int speed)
+    {
+        foreach (var car in cars)
+        {
+            if (car.MaxSpeed == speed)
+            {
+                yield return car;
+            }
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        // Пример использования
+        Car[] cars = new Car[]
+        {
+            new Car("Toyota", 2020, 180),
+            new Car("Ford", 2019, 190),
+            new Car("BMW", 2021, 200),
+            new Car("Tesla", 2022, 250)
+        };
+
+        CarCatalog catalog = new CarCatalog(cars);
+
+        Console.WriteLine("Forward iteration:");
+        foreach (var car in catalog.Forward())
+        {
+            Console.WriteLine(car);
+        }
+
+        Console.WriteLine("\nReverse iteration:");
+        foreach (var car in catalog.Reverse())
+        {
+            Console.WriteLine(car);
+        }
+
+        Console.WriteLine("\nFilter by year (2020):");
+        foreach (var car in catalog.FilterByYear(2020))
+        {
+            Console.WriteLine(car);
+        }
+
+        Console.WriteLine("\nFilter by max speed (190):");
+        foreach (var car in catalog.FilterByMaxSpeed(190))
+        {
+            Console.WriteLine(car);
+        }
+    }
+}
